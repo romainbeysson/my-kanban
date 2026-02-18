@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// USER MODEL
+// ============================================================================
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  ownedBoards   Board[]      @relation("BoardOwner")
+  memberBoards  Board[]      @relation("BoardMembers")
+  activities    Activity[]
+  assignedCards Card[]       @relation("CardAssignees")
+
+  @@map("users")
+}
+
+// ============================================================================
+// BOARD MODEL (Tableau)
+// ============================================================================
+model Board {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  background  String   @default("#0079bf") // Couleur de fond
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  ownerId  String
+  owner    User   @relation("BoardOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members  User[] @relation("BoardMembers")
+
+  lists      List[]
+  cards      Card[]
+  activities Activity[]
+
+  @@map("boards")
+}
+
+// ============================================================================
+// LIST MODEL (Colonne)
+// ============================================================================
+model List {
+  id         String   @id @default(cuid())
+  title      String
+  position   Int
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  cards Card[]
+
+  @@map("lists")
+}
+
+// ============================================================================
+// CARD MODEL (Carte)
+// ============================================================================
+model Card {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  position    Int
+  labels      Json?     // Array de labels [{id, name, color}]
+  dueDate     DateTime?
+  isArchived  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  listId String
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  assignees User[] @relation("CardAssignees")
+
+  @@map("cards")
+}
+
+// ============================================================================
+// ACTIVITY MODEL (Historique)
+// ============================================================================
+model Activity {
+  id        String   @id @default(cuid())
+  type      String   // CARD_CREATED, CARD_MOVED, CARD_UPDATED, LIST_CREATED, etc.
+  payload   Json     // Données supplémentaires
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  @@map("activities")
+}
