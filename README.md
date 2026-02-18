@@ -23,32 +23,6 @@ Une application Kanban complète inspirée de Trello, construite avec une archit
 - **Zustand** - Gestion de l'état client
 - **Axios** - Client HTTP
 
-## 📁 Structure du Projet
-
-```
-mon-trello/
-├── api/                    # Backend Express + Prisma
-│   ├── prisma/
-│   │   ├── schema.prisma   # Schéma de la base de données
-│   │   └── seed.js         # Données de test
-│   └── src/
-│       ├── config/         # Configuration (DB, Auth)
-│       ├── controllers/    # Logique métier
-│       ├── middlewares/    # Auth, validation, erreurs
-│       ├── routes/         # Définition des routes
-│       ├── validators/     # Règles de validation
-│       └── server.js       # Point d'entrée
-│
-└── client/                 # Frontend React + Vite
-    └── src/
-        ├── components/     # Composants réutilisables
-        ├── hooks/          # Hooks personnalisés (TanStack Query)
-        ├── layouts/        # Layouts de pages
-        ├── pages/          # Pages de l'application
-        ├── services/       # Appels API
-        └── stores/         # État global (Zustand)
-```
-
 ## 🛠️ Installation
 
 ### Prérequis
@@ -110,46 +84,6 @@ Si vous avez exécuté le seed :
 - **Email** : demo@example.com
 - **Mot de passe** : password123
 
-## 📚 API Endpoints
-
-### Authentification
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| POST | `/api/auth/register` | Inscription |
-| POST | `/api/auth/login` | Connexion |
-| GET | `/api/auth/profile` | Profil utilisateur |
-| PUT | `/api/auth/profile` | Modifier le profil |
-| PUT | `/api/auth/password` | Changer le mot de passe |
-
-### Boards
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| GET | `/api/boards` | Liste des boards |
-| POST | `/api/boards` | Créer un board |
-| GET | `/api/boards/:id` | Détail d'un board |
-| PUT | `/api/boards/:id` | Modifier un board |
-| DELETE | `/api/boards/:id` | Supprimer un board |
-| POST | `/api/boards/:id/members` | Ajouter un membre |
-| DELETE | `/api/boards/:id/members/:memberId` | Retirer un membre |
-
-### Lists
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| GET | `/api/boards/:boardId/lists` | Listes d'un board |
-| POST | `/api/boards/:boardId/lists` | Créer une liste |
-| PUT | `/api/boards/:boardId/lists/:id` | Modifier une liste |
-| DELETE | `/api/boards/:boardId/lists/:id` | Supprimer une liste |
-| PUT | `/api/boards/:boardId/lists/reorder` | Réordonner les listes |
-
-### Cards
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| POST | `/api/lists/:listId/cards` | Créer une carte |
-| GET | `/api/cards/:id` | Détail d'une carte |
-| PUT | `/api/cards/:id` | Modifier une carte |
-| DELETE | `/api/cards/:id` | Supprimer une carte |
-| PUT | `/api/cards/:id/move` | Déplacer une carte |
-| PUT | `/api/cards/reorder` | Réordonner les cartes |
 
 ## ✨ Fonctionnalités
 
@@ -161,18 +95,3 @@ Si vous avez exécuté le seed :
 - [x] **Persistance** : Toutes les données sont stockées dans PostgreSQL
 - [x] **UI Moderne** : Design responsive avec Tailwind CSS
 - [x] **Optimistic Updates** : Mises à jour instantanées de l'UI
-
-## 🔮 Améliorations futures
-
-- [ ] Système de membres et partage de boards
-- [ ] Commentaires sur les cartes
-- [ ] Pièces jointes
-- [ ] Historique des activités
-- [ ] Notifications en temps réel (WebSocket)
-- [ ] Recherche et filtres
-- [ ] Mode sombre
-- [ ] Export/Import de données
-
-## 📄 Licence
-
-MIT
